@@ -1,0 +1,14 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: translator
+      DATABASE_HOST: localhost
+    ports: 
+      - "5432:5432"
+    volumes:
+      - ./migration:/docker-entrypoint-initdb.d
