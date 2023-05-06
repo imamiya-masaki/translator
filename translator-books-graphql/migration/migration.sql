@@ -14,6 +14,7 @@ create table user_books(
   "id" varchar(255) DEFAULT uuid_generate_v4(),
   "user_id" varchar(255),
   "title" text NOT NULL,
-  description text,
-  PRIMARY KEY ( user_id, id )
+  "description" text,
+  PRIMARY KEY ( "user_id", "id" ),
+  UNIQUE ( "user_id", "title" )
 );

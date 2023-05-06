@@ -3,6 +3,13 @@ import { assertsNodeMode, getDBURL, getEnv } from './get_env';
 import { ApolloServer, ApolloServerOptions, BaseContext } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { signup, login, getCurrentUserId } from './auth';
+import { DB } from './postgres-init';
+import { resolverCurrrentAddBook, resolverCurrrentGetBooks } from './sql/book';
+export type Context = {
+  postgres: DB,
+  userId?: string
+}
+
 const main = async() => {
   const mode = getEnv("NODE_ENV");
   console.log('mode: ', mode);
@@ -17,9 +24,17 @@ const main = async() => {
     # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
     # This "Book" type defines the queryable fields for every book in our data source.
-    type Book {
-      title: String
-      author: String
+
+    type UserBook {
+      id: String!
+      userId: String!
+      title: String!
+      description: String
+    }
+
+    input InputUserBook {
+      title: String!
+      description: String
     }
 
     type User {
@@ -35,12 +50,14 @@ const main = async() => {
     # The "Query" type is special: it lists all of the available queries that
     # clients can execute, along with the return type for each. In this
     # case, the "books" query returns an array of zero or more Books (defined above).
+
     type Query {
-      books: [Book]
+      books(limit: Int): [UserBook]
     }
     type Mutation {
       signup(email: String!, password: String!): AuthPayLoad
       login(email: String!, password: String!): AuthPayLoad
+      addBook(book: InputUserBook!): UserBook
     }
   `;
 
@@ -62,11 +79,12 @@ const main = async() => {
 
   const resolvers: Resolvers = {
       Query: {
-        books: () => books,
+        books: resolverCurrrentGetBooks,
       },
       Mutation: {
         signup,
-        login
+        login,
+        addBook: resolverCurrrentAddBook
       }
     };
 

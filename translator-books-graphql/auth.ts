@@ -1,5 +1,5 @@
+import { Context } from './index';
 import { User, assertsEmail, assertsPassword, createUser, getUser, isExistUser } from './sql/user';
-import { DB } from './postgres-init';
 import { ApolloServerOptions, BaseContext } from '@apollo/server';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -13,11 +13,6 @@ type AuthPayLoad = {
     token: String,
     user: User
 }
-
-type Context = {
-    postgres: DB
-}
-
 type AuthFunction = (parent, args, context: Context, info) => Promise<AuthPayLoad>
 
 export const signup: AuthFunction = async (parent, args, context, info) => {
@@ -65,7 +60,6 @@ export const login: AuthFunction = async (parent, args, context, info) => {
 
 function getTokenPayload(token) {
   const result = jwt.verify(token, APP_SECRET);
-  console.log('getTokenPayload', result);
   if (typeof result === "object") {
     return {
       userId: "",
@@ -83,7 +77,6 @@ export function getCurrentUserId(req: IncomingMessage, authToken?: string) {
         throw new Error('No token found');
       }
       const { userId } = getTokenPayload(token);
-      console.log('getUserId:req', userId)
       return userId;
     }
   } else if (authToken) {
@@ -93,4 +86,11 @@ export function getCurrentUserId(req: IncomingMessage, authToken?: string) {
   }
 
   throw new Error('Not authenticated');
+}
+
+export function assertshasedContextUserId(context: Context): asserts context is Context & {userId: string} {
+  const userId = context.userId;
+  if (!userId) {
+    throw Error ("don't set currentUserId ")
+  }
 }
