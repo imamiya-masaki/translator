@@ -4,7 +4,10 @@ import { ApolloServer, ApolloServerOptions, BaseContext } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { signup, login, getCurrentUserId } from './auth';
 import { DB } from './postgres-init';
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+import { loadSchemaSync } from '@graphql-tools/load';
 import { resolverCurrrentAddBook, resolverCurrrentGetBooks } from './sql/book';
+import {join as pathJoin} from 'path';
 export type Context = {
   postgres: DB,
   userId?: string
@@ -20,57 +23,10 @@ const main = async() => {
   // A schema is a collection of type definitions (hence "typeDefs")
   // that together define the "shape" of queries that are executed against
   // your data.
-  const typeDefs = `#graphql
-    # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
-    # This "Book" type defines the queryable fields for every book in our data source.
-
-    type UserBook {
-      id: String!
-      userId: String!
-      title: String!
-      description: String
-    }
-
-    input InputUserBook {
-      title: String!
-      description: String
-    }
-
-    type User {
-      id: ID!
-      email: String!
-    }
-
-    type AuthPayLoad {
-      token: String
-      user: User
-    }
-
-    # The "Query" type is special: it lists all of the available queries that
-    # clients can execute, along with the return type for each. In this
-    # case, the "books" query returns an array of zero or more Books (defined above).
-
-    type Query {
-      books(limit: Int): [UserBook]
-    }
-    type Mutation {
-      signup(email: String!, password: String!): AuthPayLoad
-      login(email: String!, password: String!): AuthPayLoad
-      addBook(book: InputUserBook!): UserBook
-    }
-  `;
-
-  const books = [
-      {
-        title: 'The Awakening',
-        author: 'Kate Chopin',
-      },
-      {
-        title: 'City of Glass',
-        author: 'Paul Auster',
-      },
-    ];
+  const typeDefs = loadSchemaSync(pathJoin(__dirname, './schema.graphql'), {
+    loaders: [new GraphQLFileLoader()],
+  });
 
   // Resolvers define how to fetch the types defined in your schema.
   // This resolver retrieves books from the "books" array above.

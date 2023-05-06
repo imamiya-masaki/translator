@@ -46,11 +46,6 @@ function assertsUserBooks(value: Array<object>): asserts value is UserBook[] {
   }
 }
 
-type Args = {
-    limit?: number
-}
-
-
 /**
  *   input InputUserBook {
       title: String!
@@ -62,17 +57,30 @@ type InputUserBook = {
   description?: string
 }
 
+type SelectCondition = {
+  limit?: number,
+  sort?: {
+    variable: string,
+    direction: "desc" | "asc"
+  }
+}
+
 type InsertArgs = {
   book: InputUserBook
 }
 
-type ResolverBookFunction = (parent, args: Args, context: Context, info) => Promise<UserBook>
+type ResolverBookFunction = (parent, args: {condition: SelectCondition}, context: Context, info) => Promise<UserBook>
 type ResolverAddBookFunction = (parent, args: InsertArgs, context: Context, info) => Promise<UserBook>
-type ResolverBooksFunction = (parent, args: Args, context: Context, info) => Promise<UserBook[]>
+type ResolverBooksFunction = (parent, args: {condition: SelectCondition}, context: Context, info) => Promise<UserBook[]>
 type ResolverBookTypeFunction = ResolverBookFunction | ResolverBooksFunction
 
-const getBooks = async(db: DB, userId: string, args: Args): Promise<UserBook[]> =>  {
-  const books = await db`select * from user_books where user_id = ${userId} ${args.limit ? db`limit ${args.limit}`: db``}`
+const dbSelect = async (db: DB, selectTemplate: string, userId: string, condition: SelectCondition) => {
+  const selected = await db`${selectTemplate} where user_id = ${userId} ${condition.limit ? db`limit ${condition.limit}`: db``} ${condition.sort ? db`order by ${condition.sort.variable} ${condition.sort.direction}`: db``}`
+  return selected
+}
+
+const getBooks = async(db: DB, userId: string, condition: SelectCondition): Promise<UserBook[]> =>  {
+  const books = await dbSelect(db, "select * from user_books", userId, condition)
   assertsUserBooks(books)
   return books
 };
@@ -91,13 +99,13 @@ const insertBook = async(db: DB, book: Omit<UserBook, "id">): Promise<UserBook> 
   return books[0]
 };
 
-export const resolverCurrrentGetBooks: ResolverBooksFunction = async (parent, args: Args, context: Context, info) => {
+export const resolverCurrrentGetBooks: ResolverBooksFunction = async (parent, args, context, info) => {
   assertshasedContextUserId(context)
-  const books = await getBooks(context.postgres, context.userId, args)
+  const books = await getBooks(context.postgres, context.userId, args.condition)
   return books
 } 
 
-export const resolverCurrrentAddBook: ResolverAddBookFunction = async (parent, args: InsertArgs, context: Context, info) => {
+export const resolverCurrrentAddBook: ResolverAddBookFunction = async (parent, args, context, info) => {
   console.log('resolverCurrrentAddBook', args)
   assertshasedContextUserId(context)
   const target: Omit<UserBook, "id"> = {...args.book, user_id: context.userId}

@@ -6,13 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "tsc",
-    "start:dev": "NODE_ENV=development ./node_modules/.bin/ts-node ./index.ts"
+    "start:dev": "NODE_ENV=development ./node_modules/.bin/ts-node ./index.ts",
+    "codegen": "gql-gen"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.7.1",
+    "@graphql-tools/graphql-file-loader": "^7.5.17",
+    "@graphql-tools/load": "^7.8.14",
+    "@graphql-tools/schema": "^9.0.19",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
@@ -20,6 +24,9 @@
     "postgres": "^3.3.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^3.3.1",
+    "@graphql-codegen/typescript": "^3.0.4",
+    "@graphql-codegen/typescript-resolvers": "^3.2.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^18.16.3",
