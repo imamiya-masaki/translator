@@ -1,7 +1,7 @@
+import { UserBook } from '../graphqlTypes';
 import { assertshasedContextUserId } from '../auth';
 import { DB } from '../postgres-init';
 import { Context } from './../index';
-
 /**
  *  type UserBook {
       id: String!
@@ -21,14 +21,6 @@ import { Context } from './../index';
   PRIMARY KEY ( user_id, id )
 );
  */
-
-type UserBook = {
-    id: string,
-    user_id: string,
-    title: string,
-    description?: string
-}
-
 const convertDBKey = (value: string[]) => {
   return value.map( v => {
     switch(v) {
@@ -89,7 +81,7 @@ const insertBook = async(db: DB, book: Omit<UserBook, "id">): Promise<UserBook> 
   const targetBook = {
     title: book.title,
     description: book.description ?? "",
-    user_id: book.user_id
+    user_id: book.userId
   }
   const books = await db`
   insert into user_books
@@ -108,7 +100,7 @@ export const resolverCurrrentGetBooks: ResolverBooksFunction = async (parent, ar
 export const resolverCurrrentAddBook: ResolverAddBookFunction = async (parent, args, context, info) => {
   console.log('resolverCurrrentAddBook', args)
   assertshasedContextUserId(context)
-  const target: Omit<UserBook, "id"> = {...args.book, user_id: context.userId}
+  const target: Omit<UserBook, "id"> = {...args.book, userId: context.userId}
   const book = await insertBook(context.postgres, target)
   console.log('resolverCurrrentAddBook:book', book)
   return book
