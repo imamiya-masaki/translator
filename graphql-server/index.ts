@@ -24,6 +24,7 @@ const main = async() => {
   // that together define the "shape" of queries that are executed against
   // your data.
 
+  console.log('typedef', pathJoin(__dirname, './schema.graphql'));
   const typeDefs = loadSchemaSync(pathJoin(__dirname, './schema.graphql'), {
     loaders: [new GraphQLFileLoader()],
   });

@@ -19,6 +19,7 @@ export const signup: AuthFunction = async (parent, args, context, info) => {
   let token: string, user: User;
   const plainPassword = args.password;
   const email = args.email;
+  console.log('signup', email);
   try {
   assertsEmail(email);
   assertsPassword(plainPassword);

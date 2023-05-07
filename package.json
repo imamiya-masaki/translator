@@ -1,0 +1,15 @@
+{
+  "name": "translator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postgre:down": "pnpm --filter ./postgre-docker --stream -r run compose:down",
+    "postgre:up": "pnpm --filter ./postgre-docker --stream -r run compose:up",
+    "start:api:dev": "pnpm --filter ./graphql-server --stream -r run start:dev",
+    "start:api-allinone": "npm run postgre:up && npm run start:api:dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
