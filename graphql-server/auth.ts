@@ -1,6 +1,5 @@
 import { Context } from './index';
-import { User, assertsEmail, assertsPassword, createUser, getUser, isExistUser } from './sql/user';
-import { ApolloServerOptions, BaseContext } from '@apollo/server';
+import { User, assertsEmail, assertsPassword, createUser, getUser } from './sql/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { getEnv } from './get_env';
