@@ -1,4 +1,3 @@
 packages:
-  - 'client'
-  - 'graphql-server'
+  - 'apps/*'
   - 'postgre-docker'

@@ -1,7 +1,7 @@
 import { UserBook } from '../graphqlTypes';
 import { assertshasedContextUserId } from '../auth';
 import { DB } from '../postgres-init';
-import { Context } from './../index';
+import { Context } from '../index';
 /**
  *  type UserBook {
       id: String!
