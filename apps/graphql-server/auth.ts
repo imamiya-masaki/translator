@@ -6,7 +6,7 @@ import { getEnv } from './get_env';
 
 import { IncomingMessage } from 'http';
 
-const APP_SECRET = getEnv("APP_SECRET")
+const APP_USER_SECRET = getEnv("APP_USER_SECRET")
 
 type AuthPayLoad = {
     token: String,
@@ -24,13 +24,30 @@ export const signup: AuthFunction = async (parent, args, context, info) => {
   assertsPassword(plainPassword);
   const password = await bcrypt.hash(args.password, 10)
   user = await createUser(context.postgres, email, password)
-  token = jwt.sign({userId: user.id}, APP_SECRET)
+  token = jwt.sign({userId: user.id}, APP_USER_SECRET)
   } catch (e) {
     console.log("signup: error", e)
   }
   return {
     token,
     user
+  }
+}
+
+export const oauth: AuthFunction = async (parent, args, context, info) => {
+  console.log({parent, args, context, info})
+  const {name, email} = args
+  try {
+    assertsEmail(email);
+  } catch (e) {
+    
+  }
+  return {
+    token: "",
+    user: {
+      "email": "hogehoge@gmail.com",
+      "id": "hogehoge"
+    }
   }
 }
 
@@ -48,7 +65,7 @@ export const login: AuthFunction = async (parent, args, context, info) => {
   } else {
     throw Error ("user.password not inlcludes")
   }
-  token = jwt.sign({userId: user.id}, APP_SECRET)
+  token = jwt.sign({userId: user.id}, APP_USER_SECRET)
   } catch (e) {
     console.log("signup: error", e)
   }
@@ -59,7 +76,7 @@ export const login: AuthFunction = async (parent, args, context, info) => {
 }
 
 function getTokenPayload(token) {
-  const result = jwt.verify(token, APP_SECRET);
+  const result = jwt.verify(token, APP_USER_SECRET);
   if (typeof result === "object") {
     return {
       userId: "",

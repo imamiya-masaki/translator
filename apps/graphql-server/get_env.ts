@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const definedEnvs = ['STAG_POSTGRES_URI', 'DEV_POSTGRES_URI','PROD_POSTGRES_URI', 'APP_SECRET', 'MODE', 'NODE_ENV'] as const satisfies readonly string[];
+const definedEnvs = ['STAG_POSTGRES_URI', 'DEV_POSTGRES_URI','PROD_POSTGRES_URI', 'APP_USER_SECRET', 'MODE', 'NODE_ENV'] as const satisfies readonly string[];
 export type DefinedEnv = (typeof definedEnvs)[number]; 
 export const getEnv = (definedEnv: DefinedEnv): string => {
     const geted = process?.env?.[definedEnv]

@@ -5,7 +5,7 @@ import Header from '~/components/starter/header/header';
 import Footer from '~/components/starter/footer/footer';
 
 import styles from './styles.css?inline';
-import { useAuthSession } from './plugin@auth';
+import { useAuthSession, useAuthSignout } from './plugin@auth';
 
 
 export const useServerTimeLoader = routeLoader$(() => {
@@ -16,13 +16,16 @@ export const useServerTimeLoader = routeLoader$(() => {
 
 export default component$(() => {
   const session = useAuthSession();
+  const a = JSON.stringify(session, null, 2)
+  const signout = useAuthSignout();
   useStyles$(styles);
   return (
     <>
       <Header />
       <main>
         wiiii
-        {session.value?.expires}
+        {a}
+        <button onClick$={() => signout}></button>
         <Slot />
       </main>
       <Footer />

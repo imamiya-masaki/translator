@@ -2,7 +2,7 @@ import { createPostgresPool } from './postgres-init';
 import { assertsNodeMode, getDBURL, getEnv } from './get_env';
 import { ApolloServer, ApolloServerOptions, BaseContext } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { signup, login, getCurrentUserId } from './auth';
+import { signup, login, getCurrentUserId, oauth } from './auth';
 import { DB } from './postgres-init';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import { loadSchemaSync } from '@graphql-tools/load';
@@ -41,6 +41,7 @@ const main = async() => {
       Mutation: {
         signup,
         login,
+        oauth,
         addBook: resolverCurrrentAddBook
       }
     };

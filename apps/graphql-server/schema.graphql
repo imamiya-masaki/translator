@@ -49,5 +49,6 @@
     type Mutation {
       signup(email: String!, password: String!): AuthPayLoad
       login(email: String!, password: String!): AuthPayLoad
+      oauth(email: String!, password: String!): AuthPayLoad
       addBook(book: InputUserBook!): UserBook
     }
