@@ -5,7 +5,7 @@ type SQLFunction = (db: DB, ...any) => any
 
 export type User = {
   id: string,
-  email: String,
+  email: string,
   password?: string
 }
 

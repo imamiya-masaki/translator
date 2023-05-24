@@ -9,7 +9,8 @@
     "start:api:dev": "pnpm --filter ./apps/graphql-server --stream -r run start:dev",
     "start:api-allinone": "npm run postgre:up && npm run start:api:dev",
     "start:dev": "pnpm run postgre:up && pnpm --filter \"./apps/*\" --stream -r run start:dev",
-    "start:web:dev": "pnpm --filter ./apps/web --stream -r run start:dev"
+    "start:web:dev": "pnpm --filter ./apps/web --stream -r run start:dev",
+    "start:codegen": "pnpm run codegen"
   },
   "keywords": [],
   "author": "",

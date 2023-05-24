@@ -29,6 +29,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addBook?: Maybe<UserBook>;
   login?: Maybe<AuthPayLoad>;
+  oauth?: Maybe<AuthPayLoad>;
   signup?: Maybe<AuthPayLoad>;
 };
 
@@ -39,6 +40,12 @@ export type MutationAddBookArgs = {
 
 
 export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
+export type MutationOauthArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
@@ -200,6 +207,7 @@ export type AuthPayLoadResolvers<ContextType = any, ParentType extends Resolvers
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addBook?: Resolver<Maybe<ResolversTypes['UserBook']>, ParentType, ContextType, RequireFields<MutationAddBookArgs, 'book'>>;
   login?: Resolver<Maybe<ResolversTypes['AuthPayLoad']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  oauth?: Resolver<Maybe<ResolversTypes['AuthPayLoad']>, ParentType, ContextType, RequireFields<MutationOauthArgs, 'email' | 'password'>>;
   signup?: Resolver<Maybe<ResolversTypes['AuthPayLoad']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
 }>;
 

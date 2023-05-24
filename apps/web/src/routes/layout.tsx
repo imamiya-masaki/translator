@@ -25,7 +25,7 @@ export default component$(() => {
       <main>
         wiiii
         {a}
-        <button onClick$={() => signout}></button>
+        <button onClick$={() => signout} ></button>
         <Slot />
       </main>
       <Footer />

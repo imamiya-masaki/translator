@@ -5,11 +5,14 @@ import jwt from 'jsonwebtoken';
 import { getEnv } from './get_env';
 
 import { IncomingMessage } from 'http';
+import { DB } from './postgres-init';
 
 const APP_USER_SECRET = getEnv("APP_USER_SECRET")
+const AUTH_SECRET = getEnv("AUTH_SECRET")
+
 
 type AuthPayLoad = {
-    token: String,
+    token: string,
     user: User
 }
 type AuthFunction = (parent, args, context: Context, info) => Promise<AuthPayLoad>
@@ -40,7 +43,7 @@ export const oauth: AuthFunction = async (parent, args, context, info) => {
   try {
     assertsEmail(email);
   } catch (e) {
-    
+
   }
   return {
     token: "",
@@ -75,15 +78,61 @@ export const login: AuthFunction = async (parent, args, context, info) => {
   }
 }
 
-function getTokenPayload(token) {
+function isUser(value: any): value is User {
+  return  typeof value === "object" && typeof value.id === "string" && typeof value.email === "string"
+}
+
+function isPayload(value: any): value is AuthPayLoad {
+  return typeof value === "object" && isUser(value.user) && typeof value.token === "string"
+}
+
+function getTokenPayload(token): AuthPayLoad & {userId: string} {
+
   const result = jwt.verify(token, APP_USER_SECRET);
-  if (typeof result === "object") {
+  if (isPayload(result)) {
     return {
       userId: "",
       ...result
     }
   }
 }
+
+async function getTokenGithubOauthPayload(token: string, db: DB): Promise<AuthPayLoad & {userId: string}> {
+
+  const result = jwt.verify(token, AUTH_SECRET);
+  if (typeof result === "object") {
+    const email: string = result.email;
+    let user: User;
+    assertsEmail(email)
+    try {
+      user = await getUser(db, email);
+    } catch (e) {
+      console.log({user})
+      const randomPassword = Math.random().toString(32).substring(2); // とりあえずinterfaceの整合性撮るために、パスワード入れる
+      user = await createUser(db, email, randomPassword);
+    }
+    const token = jwt.sign({userId: user.id}, APP_USER_SECRET)
+    return {
+      userId: user.id,
+      token,
+      user
+    }
+  }
+}
+type OAuthType = 'GitHub'
+export function getCurrentUserIdOauth(req: IncomingMessage, db: DB, oauthType: OAuthType = "GitHub") {
+  if (req) {
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader
+      const { userId } = getTokenGithubOauthPayload(token, db);
+      return userId;
+    }
+  }
+
+  throw new Error('Not authenticated');
+}
+
 
 export function getCurrentUserId(req: IncomingMessage, authToken?: string) {
   if (req) {
