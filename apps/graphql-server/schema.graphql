@@ -45,6 +45,7 @@
 
     type Query {
       books(condition: SelectCondition): [UserBook]
+      current: User
     }
     type Mutation {
       signup(email: String!, password: String!): AuthPayLoad

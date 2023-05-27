@@ -2,6 +2,8 @@ import jwt, {type JwtPayload} from 'jsonwebtoken';
 import { serverAuth$  } from '@builder.io/qwik-auth';
 import GitHub from '@auth/core/providers/github';
 import type { Provider } from '@auth/core/providers';
+import { useQuery as graphQLUseQuery } from "qwik-graphql-client";
+import { GET_CURRENT } from '~/graphql-client/auth/oauth';
 
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } = serverAuth$(
   ({ env }) => ({
@@ -13,10 +15,11 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } = serv
       },
       async decode({token, secret}): Promise<JwtPayload | null> {
         const result = jwt.verify(token ?? "", secret)
+        const { loading, error, data } = graphQLUseQuery(GET_CURRENT)
         if (typeof result === "object") {
           return result 
         }
-        return null
+        return {loading, error, data}
       } 
     },
     providers: [

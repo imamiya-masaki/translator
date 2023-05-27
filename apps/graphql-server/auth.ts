@@ -120,12 +120,12 @@ async function getTokenGithubOauthPayload(token: string, db: DB): Promise<AuthPa
   }
 }
 type OAuthType = 'GitHub'
-export function getCurrentUserIdOauth(req: IncomingMessage, db: DB, oauthType: OAuthType = "GitHub") {
+export async function getCurrentUserIdOauth(req: IncomingMessage, db: DB, oauthType: OAuthType = "GitHub") {
   if (req) {
     const authHeader = req.headers.authorization;
     if (authHeader) {
       const token = authHeader
-      const { userId } = getTokenGithubOauthPayload(token, db);
+      const { userId } = await getTokenGithubOauthPayload(token, db);
       return userId;
     }
   }

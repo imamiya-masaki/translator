@@ -22,9 +22,9 @@
   },
   "devDependencies": {
     "@auth/core": "^0.7.1",
-    "@builder.io/qwik": "^1.1.2",
+    "@builder.io/qwik": "^1.1.4",
     "@builder.io/qwik-auth": "~0.1.0",
-    "@builder.io/qwik-city": "^1.1.2",
+    "@builder.io/qwik-city": "^1.1.4",
     "@types/eslint": "8.37.0",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.1.0",
@@ -39,8 +39,8 @@
     "vite-tsconfig-paths": "4.2.0"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.14",
     "graphql": "^16.6.0",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.0",
+    "qwik-graphql-client": "^0.2.0"
   }
 }

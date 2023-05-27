@@ -8,6 +8,7 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import { loadSchemaSync } from '@graphql-tools/load';
 import { resolverCurrrentAddBook, resolverCurrrentGetBooks } from './sql/book';
 import {join as pathJoin} from 'path';
+import { User } from './graphqlTypes';
 export type Context = {
   postgres: DB,
   userId?: string
@@ -34,9 +35,18 @@ const main = async() => {
 
   type Resolvers = ApolloServerOptions<BaseContext>["resolvers"]
 
+
+  type Health = (parent, args, context: Context, info) => Promise<User>
+
+  const current: Health = async function (parent, args, context: Context, info) {
+    const userId = context?.userId ?? ""
+    return {email: "test@test.com", id: "hogehogehelath"}
+  }
+
   const resolvers: Resolvers = {
       Query: {
         books: resolverCurrrentGetBooks,
+        current: current,
       },
       Mutation: {
         signup,

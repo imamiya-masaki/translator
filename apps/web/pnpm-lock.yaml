@@ -1,29 +1,29 @@
 lockfileVersion: '6.0'
 
 dependencies:
-  '@apollo/client':
-    specifier: ^3.7.14
-    version: 3.7.14(graphql@16.6.0)
   graphql:
     specifier: ^16.6.0
     version: 16.6.0
   jsonwebtoken:
     specifier: ^9.0.0
     version: 9.0.0
+  qwik-graphql-client:
+    specifier: ^0.2.0
+    version: 0.2.0
 
 devDependencies:
   '@auth/core':
     specifier: ^0.7.1
     version: 0.7.1
   '@builder.io/qwik':
-    specifier: ^1.1.2
-    version: 1.1.2(undici@5.22.0)
+    specifier: ^1.1.4
+    version: 1.1.4(undici@5.22.0)
   '@builder.io/qwik-auth':
     specifier: ~0.1.0
-    version: 0.1.0(@auth/core@0.7.1)(@builder.io/qwik-city@1.1.2)(@builder.io/qwik@1.1.2)
+    version: 0.1.0(@auth/core@0.7.1)(@builder.io/qwik-city@1.1.4)(@builder.io/qwik@1.1.4)
   '@builder.io/qwik-city':
-    specifier: ^1.1.2
-    version: 1.1.2
+    specifier: ^1.1.4
+    version: 1.1.4
   '@types/eslint':
     specifier: 8.37.0
     version: 8.37.0
@@ -113,7 +113,7 @@ packages:
       preact-render-to-string: 5.2.3(preact@10.11.3)
     dev: true
 
-  /@builder.io/qwik-auth@0.1.0(@auth/core@0.7.1)(@builder.io/qwik-city@1.1.2)(@builder.io/qwik@1.1.2):
+  /@builder.io/qwik-auth@0.1.0(@auth/core@0.7.1)(@builder.io/qwik-city@1.1.4)(@builder.io/qwik@1.1.4):
     resolution: {integrity: sha512-uwwVbam6yQs9evtmof/+SpRT7DzoxD+2DSwsndGcm9JBU4Sh1xMyzll6F9QbivKVboglx+4X05OzJG7QTttWMQ==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     peerDependencies:
@@ -122,12 +122,12 @@ packages:
       '@builder.io/qwik-city': '>=0.6.0'
     dependencies:
       '@auth/core': 0.7.1
-      '@builder.io/qwik': 1.1.2(undici@5.22.0)
-      '@builder.io/qwik-city': 1.1.2
+      '@builder.io/qwik': 1.1.4(undici@5.22.0)
+      '@builder.io/qwik-city': 1.1.4
     dev: true
 
-  /@builder.io/qwik-city@1.1.2:
-    resolution: {integrity: sha512-rA0Q9c/A6b3qpAI+opizRgwO0rLXvU+AdJomUtnHX4D/H8XZisbCLVLM8hrDmPckmADgNcHMJlxaawiGPgVqaA==}
+  /@builder.io/qwik-city@1.1.4:
+    resolution: {integrity: sha512-J6EAZN2vXaoou5PBC3GS6Z0RTC4jzXXNup+gLQou4yMVPnnI+i4g1bD1240Uo0VDhTLJQkBHxKWMWwRqgckISA==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     dependencies:
       '@mdx-js/mdx': 2.3.0
@@ -139,8 +139,8 @@ packages:
       - supports-color
     dev: true
 
-  /@builder.io/qwik@1.1.2(undici@5.22.0):
-    resolution: {integrity: sha512-oOif/cXd0EYi+lFprWkGeRoI+9MiUKpdwTqjk19L8OYzTo8XQ+X2OhgBzOkCKjGF32eJdRWYWFXKZyHlhHlg/g==}
+  /@builder.io/qwik@1.1.4(undici@5.22.0):
+    resolution: {integrity: sha512-FSbe2GcUBptAXMAHfN+oGUpnb3nZXzup2EYlza61bAfgWSx9SryOwNULyROis3mu7Ywdua3w6VKvCWOFdovz2w==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     hasBin: true
     peerDependencies:
@@ -2349,6 +2349,19 @@ packages:
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
+
+  /qwik-graphql-client@0.2.0:
+    resolution: {integrity: sha512-uwTSHuzAjoyv4LtskPBGf3HZg/FwMSiu9xf1kUlVX8G+k+3OOpiXIFMCaPcg2F5PH98ozEkPTt37YJYxPvviXQ==}
+    engines: {node: '>=15.0.0'}
+    dependencies:
+      '@apollo/client': 3.7.14(graphql@16.6.0)
+      graphql: 16.6.0
+    transitivePeerDependencies:
+      - graphql-ws
+      - react
+      - react-dom
+      - subscriptions-transport-ws
+    dev: false
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}

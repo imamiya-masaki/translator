@@ -1,7 +1,8 @@
-import { gql, useMutation } from "@apollo/client";
-import { client } from "..";
+import { gql } from "qwik-graphql-client";
 
-
-const oauth = gql`
-  mutation 
-  `
+export const GET_CURRENT = gql`
+  query current {
+    id
+    email
+  }
+`

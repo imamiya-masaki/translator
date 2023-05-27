@@ -6,7 +6,11 @@ import Footer from '~/components/starter/footer/footer';
 
 import styles from './styles.css?inline';
 import { useAuthSession, useAuthSignout } from './plugin@auth';
-
+import {
+  GraphQLClientProvider,
+  ApolloClient,
+  InMemoryCache,
+} from "qwik-graphql-client";
 
 export const useServerTimeLoader = routeLoader$(() => {
   return {
@@ -21,6 +25,14 @@ export default component$(() => {
   useStyles$(styles);
   return (
     <>
+    <GraphQLClientProvider
+        clientGenerator$={() =>
+            new ApolloClient({
+            uri: 'http://localhost:4000/',
+            cache: new InMemoryCache(),
+          })
+        }
+      >
       <Header />
       <main>
         wiiii
@@ -29,6 +41,7 @@ export default component$(() => {
         <Slot />
       </main>
       <Footer />
+      </GraphQLClientProvider>
     </>
   );
 });

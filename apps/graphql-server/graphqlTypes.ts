@@ -64,6 +64,7 @@ export type OrderBy = {
 export type Query = {
   __typename?: 'Query';
   books?: Maybe<Array<Maybe<UserBook>>>;
+  current?: Maybe<User>;
 };
 
 
@@ -213,6 +214,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   books?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserBook']>>>, ParentType, ContextType, Partial<QueryBooksArgs>>;
+  current?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
